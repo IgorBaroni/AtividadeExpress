@@ -1,8 +1,8 @@
 const express = require('express');
 const { Router } = require('express');
 
-const users = require('./users.json')
-const docs = require('./docs.json')
+const users = require('./json/users.json')
+const docs = require('./json/docs.json')
 
 const app = express();
 const route = Router();
