@@ -1,7 +1,5 @@
-// Nome: Igor Assis Baroni
-// 23/08/2024
-
 const { createServer } = require("node:http");
+
 
 const users = [
   {
@@ -78,6 +76,7 @@ const docs = [
     turno: "tarde",
   },
 ];
+
 
 const requestHandler = (req, res) => {
   const { method, url } = req;
