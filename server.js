@@ -1,5 +1,9 @@
 const { createServer } = require("node:http");
+const express = require('express');
+const { Router } = require('express');
 
+const app = express();
+const route = Router();
 
 const users = [
   {
@@ -78,38 +82,42 @@ const docs = [
 ];
 
 
-const requestHandler = (req, res) => {
-  const { method, url } = req;
+app.use(express.json())
 
+route.get('/', (req, res) => {
   res.setHeader("Content-Type", "application/json");
+  res.end(
+    JSON.stringify({
+      message:
+        "API rodando... entre nas rotas '/users' ou '/docs' para ver informações",
+    }))
+})
 
-  if (method === "GET" && url === "/") {
-    res.statusCode = 200;
-    res.end(
-      JSON.stringify({
-        message:
-          "API rodando... entre nas rotas '/users' ou '/docs' para ver informações",
-      })
-    );
-  } else if (method === "GET" && url === "/users") {
-    res.statusCode = 200;
-    res.end(JSON.stringify(users));
-  } else if (method === "GET" && url === "/docs") {
-    res.statusCode = 200;
-    res.end(JSON.stringify(docs));
-  } else {
-    res.statusCode = 404;
+route.get('/users', (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.statusCode = 200;
+  res.end(JSON.stringify(users));
+})
+
+route.get('/docs', (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.statusCode = 200;
+  res.end(JSON.stringify(docs));
+})
+
+route.get('*', (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.statusCode = 404;
     res.end(
       JSON.stringify({
         message: `Erro ${res.statusCode}: Rota não encontrada!`,
-      })
-    );
-  }
-};
+      }));
+})
 
-const server = createServer(requestHandler);
+
 const port = 3300;
 
-server.listen(port, () => {
+app.use(route)
+app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`);
 });
